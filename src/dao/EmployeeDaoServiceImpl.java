@@ -52,11 +52,11 @@ public class EmployeeDaoServiceImpl implements DaoService<Employee>, EmployeeDao
     @Override
     public List<Employee> findAll(String search) {
         List<Employee> employees = new ArrayList<>();
-        String s = "%" + search + "%";
+        String searchRegexp = "%" + search + "%";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("select * from Employee e where e.first_name like ? or e.last_name like ?");
-            preparedStatement.setString(1, s);
-            preparedStatement.setString(2, s);
+            preparedStatement.setString(1, searchRegexp);
+            preparedStatement.setString(2, searchRegexp);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 employees.add(getEmployeeFromResultSet(resultSet));

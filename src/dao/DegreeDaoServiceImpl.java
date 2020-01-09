@@ -49,4 +49,5 @@ public class DegreeDaoServiceImpl implements DaoService<Degree> {
         }
         return degrees;
     }
+
 }

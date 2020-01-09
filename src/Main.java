@@ -27,7 +27,6 @@ public class Main {
                 "5 - Global search by {template} \n" +
                 "6 - exit");
 
-
         boolean exit = false;
         while (!exit) {
             System.out.println("enter number of option");
@@ -75,9 +74,7 @@ public class Main {
                 default:
                     break;
             }
-
         }
-
     }
 
 }

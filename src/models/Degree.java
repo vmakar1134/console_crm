@@ -21,4 +21,5 @@ public class Degree extends IdNameHolder {
                 " name=" + getName() +
                 '}';
     }
+
 }
