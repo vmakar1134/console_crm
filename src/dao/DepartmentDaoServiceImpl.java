@@ -9,18 +9,34 @@ import service.DepartmentDaoService;
 import utils.DatabaseUtil;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DepartmentDao implements DaoService<Department>, DepartmentDaoService {
+public class DepartmentDaoServiceImpl implements DaoService<Department>, DepartmentDaoService {
 
     private Connection connection;
 
-    public DepartmentDao() {
+    public DepartmentDaoServiceImpl() {
         this.connection = Database.getConnection();
     }
 
     @Override
-    public Department findById(Long id) {
-        return null;
+    public List<Department> findAll() {
+        List<Department> departments = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from Department");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Department department = new Department();
+                department.setId(resultSet.getLong("id"));
+                department.setName(resultSet.getString("name"));
+                departments.add(department);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return departments;
     }
 
     @Override
@@ -82,10 +98,11 @@ public class DepartmentDao implements DaoService<Department>, DepartmentDaoServi
         Long sum = null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("select sum(e.salary) from Employee e " +
-                    "left join Department d on e.department_id = d.name " +
-                    "where d.id = ?");
+                    "left join Department d on e.department_id = d.id " +
+                    "where d.name = ?");
             preparedStatement.setString(1, departmentName);
             ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.first();
             sum = resultSet.getLong(1);
         } catch (SQLException e) {
             e.printStackTrace();

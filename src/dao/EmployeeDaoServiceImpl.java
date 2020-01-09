@@ -10,17 +10,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeDao implements DaoService<Employee>, EmployeeDaoService {
+public class EmployeeDaoServiceImpl implements DaoService<Employee>, EmployeeDaoService {
 
     private Connection connection;
 
-    public EmployeeDao() {
+    public EmployeeDaoServiceImpl() {
         connection = Database.getConnection();
-    }
-
-    @Override
-    public Employee findById(Long id) {
-        return null;
     }
 
     @Override
@@ -40,15 +35,30 @@ public class EmployeeDao implements DaoService<Employee>, EmployeeDaoService {
     }
 
     @Override
-    public List<Employee> findAll(String search) {
-        search = "%" + search + "%";
+    public List<Employee> findAll() {
         List<Employee> employees = new ArrayList<>();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from Employee e where e.first_name like ? or e.last_name like ?");
-            preparedStatement.setString(1, search);
-            preparedStatement.setString(2, search);
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from Employee");
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+                employees.add(getEmployeeFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employees;
+    }
+
+    @Override
+    public List<Employee> findAll(String search) {
+        List<Employee> employees = new ArrayList<>();
+        String s = "%" + search + "%";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from Employee e where e.first_name like ? or e.last_name like ?");
+            preparedStatement.setString(1, s);
+            preparedStatement.setString(2, s);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
                 employees.add(getEmployeeFromResultSet(resultSet));
             }
         } catch (SQLException e) {

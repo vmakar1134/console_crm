@@ -1,9 +1,11 @@
 package service;
 
+import java.util.List;
+
 public interface DaoService<E> {
 
     Long insert(E e);
 
-    E findById(Long id);
+    List<E> findAll();
 
 }

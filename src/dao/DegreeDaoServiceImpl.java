@@ -3,33 +3,18 @@ package dao;
 import connection.Database;
 import models.Degree;
 import service.DaoService;
-import service.DegreeDaoService;
 import utils.DatabaseUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DegreeDao implements DaoService<Degree>, DegreeDaoService {
+public class DegreeDaoServiceImpl implements DaoService<Degree> {
 
     private Connection connection;
 
-    public DegreeDao() {
+    public DegreeDaoServiceImpl() {
         this.connection = Database.getConnection();
-    }
-
-    @Override
-    public Degree findById(Long id) {
-        Degree degree = new Degree();
-        try {
-            ResultSet resultSet = connection.createStatement()
-                    .executeQuery("select * from Degree where id = ?");
-            degree.setId(resultSet.getLong("id"));
-            degree.setName(resultSet.getString("name"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return degree;
     }
 
     @Override
